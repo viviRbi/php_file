@@ -17,6 +17,9 @@
 	$descriptionError="";
 	$imageError="";
 
+	$title = "";
+	$description = "";
+
 	if(isset($_POST['title']) && isset($_POST['description']) && isset($_FILES['file-upload'])){
 
 		$title = $_POST['title'];
@@ -33,7 +36,7 @@
 		if (checkLength("description", 5, 100)) $descriptionError="<p class ='error'>Have to be between 5 and 100 words</p>";
 
 		$imageError="";
-		if(imageLimit("file-upload",1,2)) $imageError="<p class ='error'>Can only upload 1 to 2 images</p>";
+		if(imageLimit("file-upload",2)) $imageError="<p class ='error'>Can only upload 1 to 2 images</p>";
 
 		if ($titleError=="" && $descriptionError==""){
 			
@@ -46,7 +49,7 @@
 			foreach($image['name'] as $key => $value){
 				$i++;
 				$imgExt = pathinfo($image['name'][$key],PATHINFO_EXTENSION);
-				@move_uploaded_file($image['tmp_name'][$key], './images/'. $name .'-'. $i . "." .$imgExt ;
+				@move_uploaded_file($image['tmp_name'][$key], './images/'. $name .'-'. $i . "." .$imgExt) ;
 			}
 
 			// title description
@@ -76,7 +79,7 @@
 
 				<div class="row">
 					<p>Images</p>
-					<input type="file" name="file-upload[]" multiple rows="5" cols="100"><?php echo $description;?></textarea>
+					<input type="file" name="file-upload[]" multiple rows="5" cols="100">
 					<?php echo $imageError; ?>
 				</div>
 				

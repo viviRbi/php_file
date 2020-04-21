@@ -31,7 +31,6 @@
     $titleError = '';
     $descriptionError = '';
     $imageError="";
-
     // print_r($_FILES['file-upload']);
 
     if(isset($_POST['title']) && isset($_POST['description']) ){
@@ -49,29 +48,43 @@
 
         if($titleError == "" && $descriptionError==""){
             $data = $title."||".$description;
-            $fileName = "./files/$id";
+            $file = "./files/$id";
             echo $data;
 
 
-            if(file_put_contents($fileName, $data)){
+            if(file_put_contents($file, $data)){
                 $uploadSuccess = true;
             }
         }
     }
     if(isset($_FILES['file-upload'])){
-        echo 'file upload';
+        $i =0;
+        $image= $_FILES['file-upload'];
+        // echo "<pre>";
+        // print_r($image);
+        // echo '</pre>';
 
-        // image
-        // $i =0;
-        // foreach($image['name'] as $key => $value){
-        // 	$i++;
-        // 	$imgExt = pathinfo($image['name'][$key],PATHINFO_EXTENSION);
-        // 	@move_uploaded_file($image['tmp_name'][$key], './images/'. $fileName .'-'. $i . "." .$imgExt) ;
+        //----------------------------------------------
+        //Error Image //for some reason there is always errors
+        // Cannot save if image haven't been change
+        
+        $imageError="";
+        if(imageLimit("file-upload",2)) $imageError="<p class ='error'>Can only upload 1 to 2 images</p>";
+
+        // foreach ($img_arr as $key=>$value){
+        //     unlink($value)
         // }
 
-         // Error Image
-        //  $imageError="";
-        //  if(imageLimit("file-upload",1,2)) $imageError="<p class ='error'>Can only upload 1 to 2 images</p>";
+        if($imageError==""){
+            echo "no error";
+            foreach($image['name'] as $key => $value){
+                $i++;
+                $imgExt = pathinfo($image['name'][$key],PATHINFO_EXTENSION);
+                echo './images/'. $fileName .'-'. $i . "." .$imgExt;
+                @move_uploaded_file($image['tmp_name'][$key], './images/'. $fileName .'-'. $i . "." .$imgExt) ;
+            }
+            echo '<br/> Image loaded';
+        }
     }
 
     function displayImg(){
@@ -96,14 +109,14 @@
 					<?php echo $descriptionError;?>
                 </div>
                 
-                <!-- <div class="row">
+                <div class="row">
 					<p>Images</p>
-					<input type="file" name="file-upload[]" multiple rows="5" cols="100"><?php echo $description;?></textarea>
+					<input type="file" name="file-upload[]" multiple rows="5" cols="100">
                     <?php echo $imageError; ?>
                     <p id="pic" >
                     <?php displayImg(); ?>
                     </p>
-				</div> -->
+				</div>
 				
 				<div class="row">
 					<input type="submit" value="Save" name="submit">

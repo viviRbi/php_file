@@ -1,0 +1,3 @@
+Using PHP’s glob() ||To find all the files in the directory /path/to/directory with a .txt file extension, you can do this:
+
+$files = glob("/path/to/directory/*.txt");

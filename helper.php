@@ -7,17 +7,16 @@
         return $lengthError;
     }
 
-    function imageLimit($image,$min, $max){
+    function imageLimit($image,$max){
         $image = $_FILES[$image];
         $error = false;
-        if (gettype($image)=="array" && count($image)>2){
+        if (gettype($image)=="array" && count($image)>$max){
             $error = true;
         }
         elseif ($image == null){
             $error = true;
         }
         return $error;
-
     }
 
     function randomString($length=5){

@@ -47,7 +47,7 @@
 	
 	         	<div class="row <?php echo $class;?>">
 	            	<p class="no">
-	            		<input type="checkbox" name="checkbox[]" value="<?php echo $id;?>">
+	            		<input type="checkbox" name="checkbox[]" value="<?php echo $partOfImgName;?>">
 	            	</p>
 					<p class="name"><?php echo $title;?><span><?php echo $description;?></span></p>
 	                <p class="id"><?php echo $id; ?></p>
