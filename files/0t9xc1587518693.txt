@@ -1,0 +1,5 @@
+file_put contents||if(file_put_contents($fileName,$data)){
+					$title = "";
+					$description= "";
+					$uploadSuccess = true;
+				}

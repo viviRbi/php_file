@@ -38,36 +38,30 @@
         $i =0;
         $image= $_FILES['file-upload'];
 
-        // echo "<pre>";
-        // print_r($image);
-        // echo '</pre>';
-
-        //----------------------------------------------
-        //Error Image //for some reason there is always errors
         // Cannot save if image haven't been change
         
         $imageError="";
-        if(imageLimit("file-upload",2)) $imageError="<p class ='error'>Can only upload 1 to 2 images</p>";
 
-        // foreach ($img_arr as $key=>$value){
-        //     unlink($value)
-        // }
 
-        if($imageError==""){
-            foreach($image['name'] as $key => $value){
-                $i++;
-                $imgExt = pathinfo($image['name'][$key],PATHINFO_EXTENSION);
-                if(in_array(strtolower($imgExt),array("jpg","png","jpeg"))){
-                    $trueImageExtension = true;
-					@move_uploaded_file($image['tmp_name'][$key], './images/'. $name .'-'. $i . "." .$imgExt) ;
-				}else{
-                    $trueImageExtension = false;
-                    $imageError .= "<p class='error'>Only accept jpg, jpeg, png</p>";
-                }
+        foreach($image['name'] as $key => $value){
+            $i++;
+            $imgExt = pathinfo($image['name'][$key],PATHINFO_EXTENSION);
+            if(in_array(strtolower($imgExt),array("jpg","png","jpeg"))){
+                $trueImageExtension = true;
+                @move_uploaded_file($image['tmp_name'][$key], './images/'. $name .'-'. $i . "." .$imgExt) ;
+            }else{
+                $trueImageExtension = false;
+                $imageError .= "<p class='error'>Only accept jpg, jpeg, png</p>";
             }
-            echo '<br/> Image loaded';
+            if($i>2){
+                $imageError="<p class ='error'>Can only upload 1 to 2 images</p>";
+                break;
+            } 
         }
-    }
+        if ($i ==0){
+            $imageError="<p class ='error'>Can only upload 1 to 2 images</p>";
+        }
+     }
 
     if(isset($_POST['title']) && isset($_POST['description']) ){
       
@@ -85,13 +79,15 @@
         if($titleError == "" && $descriptionError==""){
             $data = $title."||".$description;
             $file = "./files/$id";
-            echo $data;
 
             if ($trueImageExtension == true){
-				if(file_put_contents($fileName,$data)){
-					$title = "";
-					$description= "";
-					$uploadSuccess = true;
+				if($imageError=="" && $titleError=="" && $descriptionError==""){
+					if(file_put_contents($file,$data)){
+                        echo
+						$title = "";
+						$description= "";
+						$uploadSuccess = true;
+					}
 				}
 			}
         }

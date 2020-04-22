@@ -1,0 +1,5 @@
+Game 2d change||Game 2d change Game 2d change||hanks to Andy Lester, I have refined my question to mean from a multilingual perspective. The manual commenters say
+
+"[sizeof] does not mean the same in many other languages based on C"
+
+Is this true?

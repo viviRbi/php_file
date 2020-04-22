@@ -7,18 +7,6 @@
         return $lengthError;
     }
 
-    function imageLimit($image,$max){
-        $image = $_FILES[$image];
-        $error = false;
-        if (gettype($image)=="array" && count($image)>$max){
-            $error = true;
-        }
-        elseif ($image == null){
-            $error = true;
-        }
-        return $error;
-    }
-
     function randomString($length=5){
         $arr= array_merge(range("A","Z"),range("a","z"),range(0,9));
         $arr= implode($arr, '');

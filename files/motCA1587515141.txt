@@ -1,1 +1,0 @@
-sd sd d sd||in_array(strtolower($imgExt),array("jpg","png","jpeg"))

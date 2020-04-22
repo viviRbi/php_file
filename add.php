@@ -37,7 +37,7 @@
 		if (checkLength("description", 5, 100)) $descriptionError="<p class ='error'>Have to be between 5 and 100 words</p>";
 
 		$imageError="";
-		if(imageLimit("file-upload",2)) $imageError="<p class ='error'>Can only upload 1 to 2 images</p>";
+		
 
 		if ($titleError=="" && $descriptionError==""){
 			
@@ -59,13 +59,22 @@
 					$trueImageExtension = false;
 					$imageError .= "<p class='error'>Only accept jpg, jpeg, png</p>";
 				}
+				if($i>2){
+					$imageError="<p class ='error'>Can only upload 1 to 2 images</p>";
+					break;
+				} 
+			}
+			if ($i ==0){
+				$imageError="<p class ='error'>Can only upload 1 to 2 images</p>";
 			}
 			// title description
 			if ($trueImageExtension == true){
-				if(file_put_contents($fileName,$data)){
-					$title = "";
-					$description= "";
-					$uploadSuccess = true;
+				if(!$imageError && !$titleError && !$descriptionError){
+					if(file_put_contents($fileName,$data)){
+						$title = "";
+						$description= "";
+						$uploadSuccess = true;
+					}
 				}
 			}
 		}
