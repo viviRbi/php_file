@@ -29,6 +29,7 @@
 		// print_r($image);
 		// echo "</pre>";
 
+
 		$titleError="";
 		if (checkLength("title", 2, 4)) $titleError="<p class ='error'>Have to be between 2 and 4 words</p>";
 	
@@ -46,17 +47,26 @@
 
 			// image
 			$i =0;
+			$trueImageExtension = false;
 			foreach($image['name'] as $key => $value){
 				$i++;
 				$imgExt = pathinfo($image['name'][$key],PATHINFO_EXTENSION);
-				@move_uploaded_file($image['tmp_name'][$key], './images/'. $name .'-'. $i . "." .$imgExt) ;
+			
+				if(in_array(strtolower($imgExt),array("jpg","png","jpeg"))){
+					$trueImageExtension = true;
+					@move_uploaded_file($image['tmp_name'][$key], './images/'. $name .'-'. $i . "." .$imgExt) ;
+				} else{
+					$trueImageExtension = false;
+					$imageError .= "<p class='error'>Only accept jpg, jpeg, png</p>";
+				}
 			}
-
 			// title description
-			if(file_put_contents($fileName,$data)){
-				$title = "";
-				$description= "";
-				$uploadSuccess = true;
+			if ($trueImageExtension == true){
+				if(file_put_contents($fileName,$data)){
+					$title = "";
+					$description= "";
+					$uploadSuccess = true;
+				}
 			}
 		}
 	} 

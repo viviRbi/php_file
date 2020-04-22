@@ -32,34 +32,12 @@
     $descriptionError = '';
     $imageError="";
     // print_r($_FILES['file-upload']);
+    $trueImageExtension = false;
 
-    if(isset($_POST['title']) && isset($_POST['description']) ){
-      
-		$title			= $_POST['title'];
-        $description	= $_POST['description'];
-
-        // Error Title
-        $titleError = '';
-		if(checkLength("title", 2, 2)) $titleError = '<p class="error">Tiêu đề dài từ 2 đến 100 tu</p>';
-		
-        // Error Description
-        $descriptionError = '';
-        if(checkLength("description", 5, 5000)) $descriptionError .= '<p class="error">Nội dung dài từ 5 đến 5000 ký tự</p>';
-
-        if($titleError == "" && $descriptionError==""){
-            $data = $title."||".$description;
-            $file = "./files/$id";
-            echo $data;
-
-
-            if(file_put_contents($file, $data)){
-                $uploadSuccess = true;
-            }
-        }
-    }
     if(isset($_FILES['file-upload'])){
         $i =0;
         $image= $_FILES['file-upload'];
+
         // echo "<pre>";
         // print_r($image);
         // echo '</pre>';
@@ -76,14 +54,46 @@
         // }
 
         if($imageError==""){
-            echo "no error";
             foreach($image['name'] as $key => $value){
                 $i++;
                 $imgExt = pathinfo($image['name'][$key],PATHINFO_EXTENSION);
-                echo './images/'. $fileName .'-'. $i . "." .$imgExt;
-                @move_uploaded_file($image['tmp_name'][$key], './images/'. $fileName .'-'. $i . "." .$imgExt) ;
+                if(in_array(strtolower($imgExt),array("jpg","png","jpeg"))){
+                    $trueImageExtension = true;
+					@move_uploaded_file($image['tmp_name'][$key], './images/'. $name .'-'. $i . "." .$imgExt) ;
+				}else{
+                    $trueImageExtension = false;
+                    $imageError .= "<p class='error'>Only accept jpg, jpeg, png</p>";
+                }
             }
             echo '<br/> Image loaded';
+        }
+    }
+
+    if(isset($_POST['title']) && isset($_POST['description']) ){
+      
+		$title			= $_POST['title'];
+        $description	= $_POST['description'];
+
+        // Error Title
+        $titleError = '';
+		if(checkLength("title", 2, 100)) $titleError = '<p class="error">Tiêu đề dài từ 2 đến 100 tu</p>';
+		
+        // Error Description
+        $descriptionError = '';
+        if(checkLength("description", 5, 5000)) $descriptionError .= '<p class="error">Nội dung dài từ 5 đến 5000 ký tự</p>';
+
+        if($titleError == "" && $descriptionError==""){
+            $data = $title."||".$description;
+            $file = "./files/$id";
+            echo $data;
+
+            if ($trueImageExtension == true){
+				if(file_put_contents($fileName,$data)){
+					$title = "";
+					$description= "";
+					$uploadSuccess = true;
+				}
+			}
         }
     }
 
